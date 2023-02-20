@@ -1,0 +1,300 @@
+USE [19ip220]
+GO
+/****** Object:  Table [dbo].[Author]    Script Date: 03.02.2023 16:41:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Author](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+ CONSTRAINT [PK_Author] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[BBK]    Script Date: 03.02.2023 16:41:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[BBK](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Code] [nchar](20) NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+ CONSTRAINT [PK_BBK] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Client]    Script Date: 03.02.2023 16:41:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Client](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Login] [nchar](20) NOT NULL,
+	[Password] [nvarchar](100) NOT NULL,
+	[Surname] [nvarchar](30) NOT NULL,
+	[Name] [nvarchar](30) NOT NULL,
+	[Patronymic] [nvarchar](30) NOT NULL,
+	[Phone] [nchar](30) NOT NULL,
+ CONSTRAINT [PK_Client] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Librarian]    Script Date: 03.02.2023 16:41:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Librarian](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Login] [nchar](20) NOT NULL,
+	[Password] [nvarchar](100) NOT NULL,
+	[Surname] [nvarchar](30) NOT NULL,
+	[Name] [nvarchar](30) NOT NULL,
+	[Patronymic] [nvarchar](30) NOT NULL,
+	[Salary] [int] NOT NULL,
+	[ImagePath] [nvarchar](100) NOT NULL,
+ CONSTRAINT [PK_Librarian] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Limits]    Script Date: 03.02.2023 16:41:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Limits](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[LibrarianId] [int] NULL,
+	[ClientId] [int] NOT NULL,
+	[DateIssued] [datetime] NOT NULL,
+	[DateExpired] [datetime] NOT NULL,
+ CONSTRAINT [PK_Limits] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Publication]    Script Date: 03.02.2023 16:41:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Publication](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Title] [nvarchar](100) NOT NULL,
+	[Annotation] [nvarchar](1000) NULL,
+	[PublisherId] [int] NOT NULL,
+	[BookId] [int] NOT NULL,
+	[BBK_Id] [int] NOT NULL,
+	[YDK_Id] [int] NOT NULL,
+	[Year] [int] NOT NULL,
+	[Pages] [int] NOT NULL,
+	[ISBN] [nchar](30) NOT NULL,
+	[Record] [nvarchar](250) NOT NULL,
+	[Left] [int] NOT NULL,
+	[ImagePath] [nvarchar](100) NOT NULL,
+ CONSTRAINT [PK_Publication] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Publication_Author]    Script Date: 03.02.2023 16:41:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Publication_Author](
+	[PublicationId] [int] NOT NULL,
+	[AuthorId] [int] NOT NULL,
+ CONSTRAINT [PK_Author_Book] PRIMARY KEY CLUSTERED 
+(
+	[PublicationId] ASC,
+	[AuthorId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PublicationIssuance]    Script Date: 03.02.2023 16:41:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PublicationIssuance](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[LibrarianId] [int] NOT NULL,
+	[ClientId] [int] NOT NULL,
+	[PublicationId] [int] NOT NULL,
+	[DateIssued] [datetime] NOT NULL,
+	[DateExpired] [datetime] NOT NULL,
+	[Passed] [bit] NOT NULL,
+ CONSTRAINT [PK_BookIssuance] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PublicationLost]    Script Date: 03.02.2023 16:41:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PublicationLost](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[LibrarianId] [int] NOT NULL,
+	[ClientId] [int] NOT NULL,
+	[PublicationId] [int] NOT NULL,
+ CONSTRAINT [PK_BookLost] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Publisher]    Script Date: 03.02.2023 16:41:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Publisher](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+ CONSTRAINT [PK_Publisher] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Warnings]    Script Date: 03.02.2023 16:41:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Warnings](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[LibrarianId] [int] NULL,
+	[ClientId] [int] NOT NULL,
+	[DateIssued] [datetime] NOT NULL,
+ CONSTRAINT [PK_Warnings] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[YDK]    Script Date: 03.02.2023 16:41:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[YDK](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Code] [nchar](20) NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+ CONSTRAINT [PK_YDK] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Limits]  WITH CHECK ADD  CONSTRAINT [FK_Limits_Client] FOREIGN KEY([ClientId])
+REFERENCES [dbo].[Client] ([Id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Limits] CHECK CONSTRAINT [FK_Limits_Client]
+GO
+ALTER TABLE [dbo].[Limits]  WITH CHECK ADD  CONSTRAINT [FK_Limits_Librarian] FOREIGN KEY([LibrarianId])
+REFERENCES [dbo].[Librarian] ([Id])
+ON DELETE SET NULL
+GO
+ALTER TABLE [dbo].[Limits] CHECK CONSTRAINT [FK_Limits_Librarian]
+GO
+ALTER TABLE [dbo].[Publication]  WITH CHECK ADD  CONSTRAINT [FK_Publication_BBK1] FOREIGN KEY([BBK_Id])
+REFERENCES [dbo].[BBK] ([Id])
+GO
+ALTER TABLE [dbo].[Publication] CHECK CONSTRAINT [FK_Publication_BBK1]
+GO
+ALTER TABLE [dbo].[Publication]  WITH CHECK ADD  CONSTRAINT [FK_Publication_Book] FOREIGN KEY([BookId])
+REFERENCES [dbo].[Book] ([Id])
+GO
+ALTER TABLE [dbo].[Publication] CHECK CONSTRAINT [FK_Publication_Book]
+GO
+ALTER TABLE [dbo].[Publication]  WITH CHECK ADD  CONSTRAINT [FK_Publication_Publisher] FOREIGN KEY([PublisherId])
+REFERENCES [dbo].[Publisher] ([Id])
+GO
+ALTER TABLE [dbo].[Publication] CHECK CONSTRAINT [FK_Publication_Publisher]
+GO
+ALTER TABLE [dbo].[Publication]  WITH CHECK ADD  CONSTRAINT [FK_Publication_YDK1] FOREIGN KEY([YDK_Id])
+REFERENCES [dbo].[YDK] ([Id])
+GO
+ALTER TABLE [dbo].[Publication] CHECK CONSTRAINT [FK_Publication_YDK1]
+GO
+ALTER TABLE [dbo].[Publication_Author]  WITH CHECK ADD  CONSTRAINT [FK_Author_Book_Book1] FOREIGN KEY([AuthorId])
+REFERENCES [dbo].[Book] ([Id])
+GO
+ALTER TABLE [dbo].[Publication_Author] CHECK CONSTRAINT [FK_Author_Book_Book1]
+GO
+ALTER TABLE [dbo].[Publication_Author]  WITH CHECK ADD  CONSTRAINT [FK_Publication_Author_Author] FOREIGN KEY([AuthorId])
+REFERENCES [dbo].[Author] ([Id])
+GO
+ALTER TABLE [dbo].[Publication_Author] CHECK CONSTRAINT [FK_Publication_Author_Author]
+GO
+ALTER TABLE [dbo].[Publication_Author]  WITH CHECK ADD  CONSTRAINT [FK_Publication_Author_Publication1] FOREIGN KEY([PublicationId])
+REFERENCES [dbo].[Publication] ([Id])
+GO
+ALTER TABLE [dbo].[Publication_Author] CHECK CONSTRAINT [FK_Publication_Author_Publication1]
+GO
+ALTER TABLE [dbo].[PublicationIssuance]  WITH CHECK ADD  CONSTRAINT [FK_BookIssuance_Client1] FOREIGN KEY([ClientId])
+REFERENCES [dbo].[Client] ([Id])
+GO
+ALTER TABLE [dbo].[PublicationIssuance] CHECK CONSTRAINT [FK_BookIssuance_Client1]
+GO
+ALTER TABLE [dbo].[PublicationIssuance]  WITH CHECK ADD  CONSTRAINT [FK_BookIssuance_Librarian1] FOREIGN KEY([LibrarianId])
+REFERENCES [dbo].[Librarian] ([Id])
+GO
+ALTER TABLE [dbo].[PublicationIssuance] CHECK CONSTRAINT [FK_BookIssuance_Librarian1]
+GO
+ALTER TABLE [dbo].[PublicationIssuance]  WITH CHECK ADD  CONSTRAINT [FK_BookIssuance_Publication1] FOREIGN KEY([PublicationId])
+REFERENCES [dbo].[Publication] ([Id])
+GO
+ALTER TABLE [dbo].[PublicationIssuance] CHECK CONSTRAINT [FK_BookIssuance_Publication1]
+GO
+ALTER TABLE [dbo].[PublicationLost]  WITH CHECK ADD  CONSTRAINT [FK_BookLost_Client1] FOREIGN KEY([ClientId])
+REFERENCES [dbo].[Client] ([Id])
+GO
+ALTER TABLE [dbo].[PublicationLost] CHECK CONSTRAINT [FK_BookLost_Client1]
+GO
+ALTER TABLE [dbo].[PublicationLost]  WITH CHECK ADD  CONSTRAINT [FK_BookLost_Librarian1] FOREIGN KEY([LibrarianId])
+REFERENCES [dbo].[Librarian] ([Id])
+GO
+ALTER TABLE [dbo].[PublicationLost] CHECK CONSTRAINT [FK_BookLost_Librarian1]
+GO
+ALTER TABLE [dbo].[PublicationLost]  WITH CHECK ADD  CONSTRAINT [FK_PublicationLost_Publication] FOREIGN KEY([PublicationId])
+REFERENCES [dbo].[Publication] ([Id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[PublicationLost] CHECK CONSTRAINT [FK_PublicationLost_Publication]
+GO
+ALTER TABLE [dbo].[Warnings]  WITH CHECK ADD  CONSTRAINT [FK_Warnings_Client1] FOREIGN KEY([ClientId])
+REFERENCES [dbo].[Client] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Warnings] CHECK CONSTRAINT [FK_Warnings_Client1]
+GO
+ALTER TABLE [dbo].[Warnings]  WITH CHECK ADD  CONSTRAINT [FK_Warnings_Librarian] FOREIGN KEY([LibrarianId])
+REFERENCES [dbo].[Librarian] ([Id])
+ON UPDATE CASCADE
+ON DELETE SET NULL
+GO
+ALTER TABLE [dbo].[Warnings] CHECK CONSTRAINT [FK_Warnings_Librarian]
+GO
