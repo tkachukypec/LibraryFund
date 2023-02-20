@@ -1,0 +1,117 @@
+﻿<Window x:Class="LibraryIS.View.Dialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LibraryIS.View"
+        mc:Ignorable="d"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen"
+        Name="_window"
+        Title="Dialog" Height="550" Width="500">
+    <Window.Resources>
+        <SolidColorBrush x:Key="infoColor">#7DBAAB</SolidColorBrush>
+        <SolidColorBrush x:Key="errorColor">#F44336</SolidColorBrush>
+        <SolidColorBrush x:Key="confirmationColor">#865AE2</SolidColorBrush>
+        <ImageSource x:Key="infoImage">/Resources/Images/dialogResources/info.png</ImageSource>
+        <ImageSource x:Key="errorImage">/Resources/Images/dialogResources/error.png</ImageSource>
+        <ImageSource x:Key="confirmationImage">/Resources/Images/dialogResources/confirmation.png</ImageSource>
+        <SolidColorBrush x:Key="selectionInfo">#8ACCBB</SolidColorBrush>
+        <SolidColorBrush x:Key="selectionError">#FF473A</SolidColorBrush>
+        <SolidColorBrush x:Key="selectionConf">#8E60F2</SolidColorBrush>
+
+        <Style TargetType="Button" x:Key="baseStyleButton">
+            <Setter Property="Width" Value="100"></Setter>
+            <Setter Property="Foreground" Value="White"></Setter>
+            <Setter Property="FontSize" Value="25"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="_brd" Background="Transparent">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter></ContentPresenter>
+                            </TextBlock>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="_brd" Property="Background" Value="{Binding Background,RelativeSource={RelativeSource AncestorType=Button}}"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Button" BasedOn="{StaticResource baseStyleButton}" x:Key="infoStyleButton">
+            <Setter Property="Content" Value="Ok"></Setter>
+            <Setter Property="Background" Value="{StaticResource selectionInfo}"></Setter>
+        </Style>
+
+        <Style TargetType="Button" BasedOn="{StaticResource infoStyleButton}" x:Key="errorStyleButton">
+            <Setter Property="Background" Value="{StaticResource selectionError}"></Setter>
+        </Style>
+
+        <Style TargetType="Button" BasedOn="{StaticResource baseStyleButton}" x:Key="yesConfStyleButton">
+            <Setter Property="Content" Value="Да"></Setter>
+            <Setter Property="Background" Value="{StaticResource selectionConf}"></Setter>
+        </Style>
+
+        <Style TargetType="Button" BasedOn="{StaticResource yesConfStyleButton}" x:Key="noConfStyleButton">
+            <Setter Property="Content" Value="Нет"></Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border Margin="5" CornerRadius="10" Background="White">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" ShadowDepth="1"></DropShadowEffect>
+        </Border.Effect>
+        <StackPanel>
+            <Image x:Name="_image" Width="75" Height="75" Margin="0,20" HorizontalAlignment="Center">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=_window,Path=TypeDialog}" Value="0">
+                                <Setter Property="Source" Value="{StaticResource infoImage}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=_window,Path=TypeDialog}" Value="1">
+                                <Setter Property="Source" Value="{StaticResource errorImage}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=_window,Path=TypeDialog}" Value="2">
+                                <Setter Property="Source" Value="{StaticResource confirmationImage}"></Setter>
+                            </DataTrigger>
+
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+            <TextBlock MaxHeight="75" x:Name="_captionTextBlock" FontWeight="Bold" Margin="20,10,20,10" TextWrapping="Wrap"
+                       TextTrimming="CharacterEllipsis" FontSize="25">Подтверждение удаления</TextBlock>
+            <TextBlock MaxHeight="200" x:Name="_messageTextBlock" FontSize="15" Foreground="#7d7d7d"
+                       TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Margin="20,0,20,40">Вы действительно хотите удалить данный элемент</TextBlock>
+            <Border Height="65" CornerRadius="0,0,10,10">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=_window,Path=TypeDialog}" Value="0">
+                                <Setter Property="Background" Value="{StaticResource infoColor}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=_window,Path=TypeDialog}" Value="1">
+                                <Setter Property="Background" Value="{StaticResource errorColor}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=_window,Path=TypeDialog}" Value="2">
+                                <Setter Property="Background" Value="{StaticResource confirmationColor}"></Setter>
+                            </DataTrigger>
+
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <ContentControl x:Name="_contentControl" HorizontalAlignment="Center"></ContentControl>
+            </Border>
+        </StackPanel>
+    </Border>
+
+
+</Window>

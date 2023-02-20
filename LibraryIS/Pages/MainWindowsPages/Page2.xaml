@@ -1,0 +1,142 @@
+﻿<Page x:Class="LibraryIS.Pages.MainWindowsPages.Page2"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:LibraryIS.Pages.MainWindowsPages"
+      xmlns:charts="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+      xmlns:converters="clr-namespace:LibraryIS.converters"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Name="window"
+      Title="{Binding Title}">
+    <Page.Resources>
+        <converters:PieSeriesConverter x:Key="conv"></converters:PieSeriesConverter>
+        <converters:ListValuesToChartValues x:Key="conv2"></converters:ListValuesToChartValues>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80*"></RowDefinition>
+            <RowDefinition Height="223*"></RowDefinition>
+            <RowDefinition Height="147*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Roboto" FontSize="25" Margin="30,30" Text="{Binding Title}"></TextBlock>
+        <charts:PieChart LegendLocation="Bottom" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
+            <charts:PieChart.Series>
+                <MultiBinding Converter="{StaticResource conv}">
+                    <Binding Path="BookLabels"></Binding>
+                    <Binding Path="CountExtraditionValues"></Binding>
+                </MultiBinding>
+            </charts:PieChart.Series>
+        </charts:PieChart>
+
+        <charts:CartesianChart Grid.Row="2" Grid.Column="0">
+            <charts:CartesianChart.Series>
+                <charts:ColumnSeries Values="{Binding RelativeFrequencies,Converter={StaticResource conv2}}"></charts:ColumnSeries>
+            </charts:CartesianChart.Series>
+            <charts:CartesianChart.AxisX>
+                <charts:Axis Labels="{Binding BookLabels}"></charts:Axis>
+            </charts:CartesianChart.AxisX>
+        </charts:CartesianChart>
+
+        <charts:CartesianChart Grid.Row="2" Grid.Column="1">
+            <charts:CartesianChart.Series>
+                <charts:LineSeries Values="{Binding AccumulatedRelativeFrequencies,Converter={StaticResource conv2}}"></charts:LineSeries>
+            </charts:CartesianChart.Series>
+            <charts:CartesianChart.AxisX>
+                <charts:Axis Labels="{Binding BookLabels}"></charts:Axis>
+            </charts:CartesianChart.AxisX>
+        </charts:CartesianChart>
+
+        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
+            <TextBlock TextAlignment="Center" FontWeight="Medium" Margin="0,10" Text="Наиболее популярная книга"></TextBlock>
+            <Image Source="{Binding PopularPub.ImagePath,Converter={StaticResource relativeToFullPathConverter}}"
+                   Height="150" Width="150" Margin="0, 20"></Image>
+            <TextBlock Foreground="#7d7d7d" TextWrapping="Wrap" Text="{Binding PopularPub.Book.Author,
+                Converter={StaticResource listAuthorToStringConverter}}" TextAlignment="Center"></TextBlock>
+            <TextBlock FontWeight="Medium" FontSize="13" Text="{Binding PopularBook.Book.Title}"
+                       TextWrapping="Wrap" TextAlignment="Center"></TextBlock>
+            <TextBlock FontSize="13" Text="{Binding PopularPub.BookIssuance.Count,StringFormat=(количество аренд:{0})}"
+                       TextWrapping="Wrap" TextAlignment="Center"></TextBlock>
+        </StackPanel>
+        <Button HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Grid.Row="2" Click="Button_Click">Сохранить отчет в .doc</Button>
+
+        <Border Visibility="Hidden" x:Name="plug" Background="#F0FFFFFF" Grid.RowSpan="3" Grid.ColumnSpan="3">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+                <Border ClipToBounds="True" Width="200" Height="200" CornerRadius="200" Background="#ededed">
+                    <Canvas x:Name="canvasAnimation" Margin="0,0,0,0">
+                        <Rectangle Width="120" Height="120" Canvas.Left="40" Canvas.Top="50" Fill="#6375f1"></Rectangle>
+                        <Polygon Points="40,51,40,40,70,40,80,51" Fill="#6375f1"></Polygon>
+                        <Rectangle x:Name="listOne" Fill="#9d9d9d" Width="80" Height="100" Canvas.Left="60" Canvas.Top="-170"></Rectangle>
+                        <Rectangle x:Name="listTwo" Fill="#AdAdAd" Width="90" Height="100" Canvas.Left="55" Canvas.Top="-150"></Rectangle>
+                        <Rectangle x:Name="listTree" Fill="White" Width="100" Height="100" Canvas.Left="50" Canvas.Top="-120"></Rectangle>
+                        <Path Fill="#688AFD" Canvas.Left="-1">
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure x:Name="test" StartPoint="40,70">
+                                        <LineSegment x:Name="two" Point="160,70"></LineSegment>
+                                        <LineSegment Point="160,70"></LineSegment>
+                                        <LineSegment Point="40,70"></LineSegment>
+                                    </PathFigure>
+                                </PathGeometry>
+                            </Path.Data>
+                        </Path>
+                    </Canvas>
+                </Border>
+                <TextBlock Foreground="#7D7D7D" FontStretch="Normal" FontSize="20">Пожалуйста, подождите. Идет создание отчета...</TextBlock>
+            </StackPanel>
+        </Border>
+    </Grid>
+    <Page.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <PointAnimationUsingKeyFrames RepeatBehavior="Forever" Storyboard.TargetName="test" Storyboard.TargetProperty="StartPoint" Duration="0:0:2.5">
+                        <LinearPointKeyFrame KeyTime="0%" Value="40,70"></LinearPointKeyFrame>
+                        <LinearPointKeyFrame KeyTime="20%" Value="30,80"></LinearPointKeyFrame>
+                        <LinearPointKeyFrame KeyTime="65%" Value="30,80"></LinearPointKeyFrame>
+                        <LinearPointKeyFrame KeyTime="65%" Value="40,70"></LinearPointKeyFrame>
+                    </PointAnimationUsingKeyFrames>
+                    <PointAnimationUsingKeyFrames RepeatBehavior="Forever" Storyboard.TargetName="two" Storyboard.TargetProperty="Point" Duration="0:0:2.5">
+                        <LinearPointKeyFrame KeyTime="0%" Value="160,70"></LinearPointKeyFrame>
+                        <LinearPointKeyFrame KeyTime="20%" Value="170,80"></LinearPointKeyFrame>
+                        <LinearPointKeyFrame KeyTime="65%" Value="170,80"></LinearPointKeyFrame>
+                        <LinearPointKeyFrame KeyTime="65%" Value="160,70"></LinearPointKeyFrame>
+                    </PointAnimationUsingKeyFrames>
+                    <DoubleAnimationUsingKeyFrames RepeatBehavior="Forever" Storyboard.TargetName="listTree" Storyboard.TargetProperty="(Canvas.Top)" Duration="0:0:2.5">
+                        <LinearDoubleKeyFrame KeyTime="20%" Value="-170"></LinearDoubleKeyFrame>
+                        <LinearDoubleKeyFrame KeyTime="25%" Value="70"></LinearDoubleKeyFrame>
+                        <LinearDoubleKeyFrame KeyTime="65%" Value="70"></LinearDoubleKeyFrame>
+                        <LinearDoubleKeyFrame KeyTime="65%" Value="-170"></LinearDoubleKeyFrame>
+                    </DoubleAnimationUsingKeyFrames>
+                    <DoubleAnimationUsingKeyFrames RepeatBehavior="Forever" Storyboard.TargetName="listTwo" Storyboard.TargetProperty="(Canvas.Top)" Duration="0:0:2.5">
+                        <LinearDoubleKeyFrame KeyTime="20%" Value="-150"></LinearDoubleKeyFrame>
+                        <LinearDoubleKeyFrame KeyTime="25%" Value="60"></LinearDoubleKeyFrame>
+                        <LinearDoubleKeyFrame KeyTime="65%" Value="60"></LinearDoubleKeyFrame>
+                        <LinearDoubleKeyFrame KeyTime="65%" Value="-150"></LinearDoubleKeyFrame>
+                    </DoubleAnimationUsingKeyFrames>
+                    <DoubleAnimationUsingKeyFrames RepeatBehavior="Forever" Storyboard.TargetName="listOne" Storyboard.TargetProperty="(Canvas.Top)" Duration="0:0:2.5">
+                        <LinearDoubleKeyFrame KeyTime="20%" Value="-120"></LinearDoubleKeyFrame>
+                        <LinearDoubleKeyFrame KeyTime="25%" Value="50"></LinearDoubleKeyFrame>
+                        <LinearDoubleKeyFrame KeyTime="65%" Value="50"></LinearDoubleKeyFrame>
+                        <LinearDoubleKeyFrame KeyTime="65%" Value="-120"></LinearDoubleKeyFrame>
+                    </DoubleAnimationUsingKeyFrames>
+                    <ThicknessAnimationUsingKeyFrames RepeatBehavior="Forever" Storyboard.TargetName="canvasAnimation" Storyboard.TargetProperty="Margin" Duration="0:0:2.5">
+                        <LinearThicknessKeyFrame KeyTime="30%" Value="0,0,0,0"></LinearThicknessKeyFrame>
+                        <LinearThicknessKeyFrame KeyTime="65%" Value="-200,0,0,0"></LinearThicknessKeyFrame>
+                        <LinearThicknessKeyFrame KeyTime="65%" Value="200,0,0,0"></LinearThicknessKeyFrame>
+                        <LinearThicknessKeyFrame KeyTime="100%" Value="0,0,0,0"></LinearThicknessKeyFrame>
+                    </ThicknessAnimationUsingKeyFrames>
+
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Page.Triggers>
+</Page>

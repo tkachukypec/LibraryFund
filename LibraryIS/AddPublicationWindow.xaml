@@ -1,0 +1,63 @@
+﻿<Window x:Class="LibraryIS.AddPublicationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LibraryIS"
+        mc:Ignorable="d"
+        Title="{Binding Title,StringFormat={}{0} публикацию}" Height="450" Width="800">
+    <Grid>
+        <TextBlock Text="{Binding Title,StringFormat={}{0} публикацию}" FontWeight="Bold" FontSize="20" Margin="40,0,-0.6,-0.8"></TextBlock>
+        <local:PhotoPicker SaveDirectory="images/books" ImagePath="{Binding Publication.ImagePath,Mode=TwoWay}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40" Width="150" Height="150"></local:PhotoPicker>
+        <StackPanel HorizontalAlignment="Right" Margin="0,40,20,0" Orientation="Vertical">
+
+            <TextBlock Text="Год издания"></TextBlock>
+            <TextBox HorizontalAlignment="Left" Width="70" Text="{Binding Publication.Year}"></TextBox>
+            <TextBlock Text="Тираж"></TextBlock>
+            <TextBox HorizontalAlignment="Left" Width="70" Text="{Binding Publication.Count}"></TextBox>
+            <TextBlock Text="Осталось"></TextBlock>
+            <TextBox HorizontalAlignment="Left" Width="70" Text="{Binding Publication.Left}"></TextBox>
+            <TextBlock Text="Страниц"></TextBlock>
+            <TextBox HorizontalAlignment="Left" Width="70" Text="{Binding Publication.Pages}"></TextBox>
+            <TextBlock Text="ISBN"></TextBlock>
+            <TextBox HorizontalAlignment="Left" Width="70" Text="{Binding Publication.ISBN}"></TextBox>
+            <TextBlock Text="Article"></TextBlock>
+            <TextBox HorizontalAlignment="Left" Width="70" Text="{Binding Publication.Article}"></TextBox>
+            <TextBlock Text="Запись"></TextBlock>
+            <TextBox HorizontalAlignment="Left" Width="70" Text="{Binding Publication.Record}"></TextBox>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="40,200,0,0">
+            <TextBlock Text="Книга"></TextBlock>
+            <ComboBox ItemsSource="{Binding Books}" DisplayMemberPath="Title" SelectedItem="{Binding Publication.Book}" Width="220"></ComboBox>
+            <TextBlock Text="ББК"></TextBlock>
+            <ComboBox ItemsSource="{Binding BBKs}" DisplayMemberPath="Name" SelectedItem="{Binding Publication.BBK}" Width="220"></ComboBox>
+            <TextBlock Text="УДК"></TextBlock>
+            <ComboBox ItemsSource="{Binding YDKs}" DisplayMemberPath="Name" SelectedItem="{Binding Publication.YDK}" Width="220"></ComboBox>
+            <TextBlock Text="Издатель"></TextBlock>
+            <ComboBox ItemsSource="{Binding Publishers}" DisplayMemberPath="Name" SelectedItem="{Binding Publication.Publisher}" Width="220"></ComboBox>
+            <!--
+            <TextBlock Text="Автор(ы)"></TextBlock>
+            <TextBox TextChanged="TextBox_TextChanged" Height="30" Style="{StaticResource searchTextBoxStyle}" Width="220"></TextBox>
+            <ListBox x:Name="lB" IsTextSearchEnabled="True" ItemContainerStyle="{StaticResource authorListItemStyle}" SelectionMode="Multiple"
+                     ItemsSource="{Binding Authors}" Margin="0,10,0,0" Height="150" SelectionChanged="ListBox_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox IsChecked="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected}">
+                            <CheckBox.Content>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat=" {0}">
+                                            <Binding Path="Name"></Binding>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </CheckBox.Content>
+                        </CheckBox>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            -->
+            <Button Command="{Binding SaveCommand}" Margin="0,20,0,0">Сохранить</Button>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a154b8fafdfc4c05a64332746499786f" Name="Diagram1">
+        <EntityTypeShape EntityType="dbModel.Author" Width="1.5" PointX="0.75" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbModel.BBK" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbModel.Librarian" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbModel.LostPubs" Width="1.5" PointX="5.25" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbModel.Publication" Width="1.5" PointX="3" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbModel.Publisher" Width="1.5" PointX="0.75" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbModel.RentedPubs" Width="1.5" PointX="8.25" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="dbModel.YDK" Width="1.5" PointX="0.75" PointY="8.875" IsExpanded="true" />
+        <AssociationConnector Association="dbModel.FK_Publications_BBK" ManuallyRouted="false" />
+        <AssociationConnector Association="dbModel.FK_LostPublications_Librarian" ManuallyRouted="false" />
+        <AssociationConnector Association="dbModel.FK_RentedPublications_Librarian" ManuallyRouted="false" />
+        <AssociationConnector Association="dbModel.FK_LostPublications_Publications" ManuallyRouted="false" />
+        <AssociationConnector Association="dbModel.FK_Publications_Publisher" ManuallyRouted="false" />
+        <AssociationConnector Association="dbModel.FK_Publications_YDK" ManuallyRouted="false" />
+        <AssociationConnector Association="dbModel.FK_RentedPublications_Publications" ManuallyRouted="false" />
+        <AssociationConnector Association="dbModel.publication_author" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

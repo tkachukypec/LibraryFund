@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Хранилище dbModelContainer" CdmEntityContainer="Entities">
+    <EntitySetMapping Name="Author">
+      <EntityTypeMapping TypeName="dbModel.Author">
+        <MappingFragment StoreEntitySet="authors">
+          <ScalarProperty Name="Id" ColumnName="id" />
+          <ScalarProperty Name="Name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BBK">
+      <EntityTypeMapping TypeName="dbModel.BBK">
+        <MappingFragment StoreEntitySet="bbk">
+          <ScalarProperty Name="Id" ColumnName="id" />
+          <ScalarProperty Name="Code" ColumnName="code" />
+          <ScalarProperty Name="Name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Librarian">
+      <EntityTypeMapping TypeName="dbModel.Librarian">
+        <MappingFragment StoreEntitySet="librarians">
+          <ScalarProperty Name="Id" ColumnName="id" />
+          <ScalarProperty Name="Login" ColumnName="login" />
+          <ScalarProperty Name="Password" ColumnName="password" />
+          <ScalarProperty Name="Surname" ColumnName="surname" />
+          <ScalarProperty Name="Name" ColumnName="name" />
+          <ScalarProperty Name="Patronymic" ColumnName="patronymic" />
+          <ScalarProperty Name="Salary" ColumnName="salary" />
+          <ScalarProperty Name="ImagePath" ColumnName="image_path" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LostPubs">
+      <EntityTypeMapping TypeName="dbModel.LostPubs">
+        <MappingFragment StoreEntitySet="lost_pubs">
+          <ScalarProperty Name="Id" ColumnName="id" />
+          <ScalarProperty Name="LibrarianId" ColumnName="librarian_id" />
+          <ScalarProperty Name="ClientId" ColumnName="client_id" />
+          <ScalarProperty Name="PublicationId" ColumnName="pub_id" />
+          <ScalarProperty Name="Count" ColumnName="count" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Publication">
+      <EntityTypeMapping TypeName="dbModel.Publication">
+        <MappingFragment StoreEntitySet="publications">
+          <ScalarProperty Name="Id" ColumnName="id" />
+          <ScalarProperty Name="Title" ColumnName="title" />
+          <ScalarProperty Name="Annotation" ColumnName="annotation" />
+          <ScalarProperty Name="PublisherId" ColumnName="publisher_id" />
+          <ScalarProperty Name="BBK_Id" ColumnName="bbk_id" />
+          <ScalarProperty Name="YDK_Id" ColumnName="ydk_id" />
+          <ScalarProperty Name="Year" ColumnName="year" />
+          <ScalarProperty Name="Pages" ColumnName="pages" />
+          <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+          <ScalarProperty Name="Record" ColumnName="record" />
+          <ScalarProperty Name="Left" ColumnName="left" />
+          <ScalarProperty Name="ImagePath" ColumnName="image_path" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Publisher">
+      <EntityTypeMapping TypeName="dbModel.Publisher">
+        <MappingFragment StoreEntitySet="publishers">
+          <ScalarProperty Name="Id" ColumnName="id" />
+          <ScalarProperty Name="Name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RentedPubs">
+      <EntityTypeMapping TypeName="dbModel.RentedPubs">
+        <MappingFragment StoreEntitySet="rented_pubs">
+          <ScalarProperty Name="Id" ColumnName="id" />
+          <ScalarProperty Name="LibrarianId" ColumnName="librarian_id" />
+          <ScalarProperty Name="ClientId" ColumnName="client_id" />
+          <ScalarProperty Name="PublicationId" ColumnName="pub_id" />
+          <ScalarProperty Name="CountIssued" ColumnName="count_issued" />
+          <ScalarProperty Name="CountReturn" ColumnName="count_return" />
+          <ScalarProperty Name="DateIssued" ColumnName="date_issued" />
+          <ScalarProperty Name="DateExpired" ColumnName="date_expired" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="YDK">
+      <EntityTypeMapping TypeName="dbModel.YDK">
+        <MappingFragment StoreEntitySet="ydk">
+          <ScalarProperty Name="Id" ColumnName="id" />
+          <ScalarProperty Name="Code" ColumnName="code" />
+          <ScalarProperty Name="Name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="publication_author" TypeName="dbModel.publication_author" StoreEntitySet="publication_author">
+      <EndProperty Name="authors">
+        <ScalarProperty Name="Id" ColumnName="author_id" />
+      </EndProperty>
+      <EndProperty Name="publications">
+        <ScalarProperty Name="Id" ColumnName="pub_id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

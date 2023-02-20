@@ -1,0 +1,615 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище dbModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="authors">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="bbk">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="librarians">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="login" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="surname" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="patronymic" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="salary" Type="int" Nullable="false" />
+          <Property Name="image_path" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="lost_pubs">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="librarian_id" Type="int" />
+          <Property Name="client_id" Type="int" Nullable="false" />
+          <Property Name="pub_id" Type="int" Nullable="false" />
+          <Property Name="count" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="publication_author">
+          <Key>
+            <PropertyRef Name="pub_id" />
+            <PropertyRef Name="author_id" />
+          </Key>
+          <Property Name="pub_id" Type="int" Nullable="false" />
+          <Property Name="author_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="publications">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="annotation" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="publisher_id" Type="int" Nullable="false" />
+          <Property Name="bbk_id" Type="int" />
+          <Property Name="ydk_id" Type="int" />
+          <Property Name="year" Type="int" Nullable="false" />
+          <Property Name="pages" Type="int" Nullable="false" />
+          <Property Name="ISBN" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="record" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="left" Type="int" Nullable="false" />
+          <Property Name="image_path" Type="nchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="publishers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="rented_pubs">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="librarian_id" Type="int" />
+          <Property Name="client_id" Type="int" Nullable="false" />
+          <Property Name="pub_id" Type="int" Nullable="false" />
+          <Property Name="count_issued" Type="int" Nullable="false" />
+          <Property Name="count_return" Type="int" Nullable="false" />
+          <Property Name="date_issued" Type="datetime" Nullable="false" />
+          <Property Name="date_expired" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ydk">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_LostPublications_Librarian">
+          <End Role="librarians" Type="Self.librarians" Multiplicity="0..1" />
+          <End Role="lost_pubs" Type="Self.lost_pubs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="librarians">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lost_pubs">
+              <PropertyRef Name="librarian_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LostPublications_Publications">
+          <End Role="publications" Type="Self.publications" Multiplicity="1" />
+          <End Role="lost_pubs" Type="Self.lost_pubs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="publications">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lost_pubs">
+              <PropertyRef Name="pub_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Publication_Author_authors">
+          <End Role="authors" Type="Self.authors" Multiplicity="1" />
+          <End Role="publication_author" Type="Self.publication_author" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="authors">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="publication_author">
+              <PropertyRef Name="author_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Publication_Author_Publications">
+          <End Role="publications" Type="Self.publications" Multiplicity="1" />
+          <End Role="publication_author" Type="Self.publication_author" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="publications">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="publication_author">
+              <PropertyRef Name="pub_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Publications_BBK">
+          <End Role="bbk" Type="Self.bbk" Multiplicity="0..1" />
+          <End Role="publications" Type="Self.publications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="bbk">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="publications">
+              <PropertyRef Name="bbk_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Publications_Publisher">
+          <End Role="publishers" Type="Self.publishers" Multiplicity="1" />
+          <End Role="publications" Type="Self.publications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="publishers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="publications">
+              <PropertyRef Name="publisher_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Publications_YDK">
+          <End Role="ydk" Type="Self.ydk" Multiplicity="0..1" />
+          <End Role="publications" Type="Self.publications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ydk">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="publications">
+              <PropertyRef Name="ydk_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentedPublications_Librarian">
+          <End Role="librarians" Type="Self.librarians" Multiplicity="0..1" />
+          <End Role="rented_pubs" Type="Self.rented_pubs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="librarians">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rented_pubs">
+              <PropertyRef Name="librarian_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentedPublications_Publications">
+          <End Role="publications" Type="Self.publications" Multiplicity="1" />
+          <End Role="rented_pubs" Type="Self.rented_pubs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="publications">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rented_pubs">
+              <PropertyRef Name="pub_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище dbModelContainer">
+          <EntitySet Name="authors" EntityType="Self.authors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="bbk" EntityType="Self.bbk" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="librarians" EntityType="Self.librarians" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="lost_pubs" EntityType="Self.lost_pubs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="publication_author" EntityType="Self.publication_author" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="publications" EntityType="Self.publications" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="publishers" EntityType="Self.publishers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="rented_pubs" EntityType="Self.rented_pubs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ydk" EntityType="Self.ydk" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_LostPublications_Librarian" Association="Self.FK_LostPublications_Librarian">
+            <End Role="librarians" EntitySet="librarians" />
+            <End Role="lost_pubs" EntitySet="lost_pubs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LostPublications_Publications" Association="Self.FK_LostPublications_Publications">
+            <End Role="publications" EntitySet="publications" />
+            <End Role="lost_pubs" EntitySet="lost_pubs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publication_Author_authors" Association="Self.FK_Publication_Author_authors">
+            <End Role="authors" EntitySet="authors" />
+            <End Role="publication_author" EntitySet="publication_author" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publication_Author_Publications" Association="Self.FK_Publication_Author_Publications">
+            <End Role="publications" EntitySet="publications" />
+            <End Role="publication_author" EntitySet="publication_author" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publications_BBK" Association="Self.FK_Publications_BBK">
+            <End Role="bbk" EntitySet="bbk" />
+            <End Role="publications" EntitySet="publications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publications_Publisher" Association="Self.FK_Publications_Publisher">
+            <End Role="publishers" EntitySet="publishers" />
+            <End Role="publications" EntitySet="publications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publications_YDK" Association="Self.FK_Publications_YDK">
+            <End Role="ydk" EntitySet="ydk" />
+            <End Role="publications" EntitySet="publications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentedPublications_Librarian" Association="Self.FK_RentedPublications_Librarian">
+            <End Role="librarians" EntitySet="librarians" />
+            <End Role="rented_pubs" EntitySet="rented_pubs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentedPublications_Publications" Association="Self.FK_RentedPublications_Publications">
+            <End Role="publications" EntitySet="publications" />
+            <End Role="rented_pubs" EntitySet="rented_pubs" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="dbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Author">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Publications" Relationship="Self.publication_author" FromRole="authors" ToRole="publications" />
+        </EntityType>
+        <EntityType Name="BBK">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Publications" Relationship="Self.FK_Publications_BBK" FromRole="bbk" ToRole="publications" />
+        </EntityType>
+        <EntityType Name="Librarian">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Login" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Patronymic" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Salary" Type="Int32" Nullable="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="LostPubs" Relationship="Self.FK_LostPublications_Librarian" FromRole="librarians" ToRole="lost_pubs" />
+          <NavigationProperty Name="RentedPubs" Relationship="Self.FK_RentedPublications_Librarian" FromRole="librarians" ToRole="rented_pubs" />
+        </EntityType>
+        <EntityType Name="LostPubs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LibrarianId" Type="Int32" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="PublicationId" Type="Int32" Nullable="false" />
+          <Property Name="Count" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Librarian" Relationship="Self.FK_LostPublications_Librarian" FromRole="lost_pubs" ToRole="librarians" />
+          <NavigationProperty Name="Publication" Relationship="Self.FK_LostPublications_Publications" FromRole="lost_pubs" ToRole="publications" />
+        </EntityType>
+        <EntityType Name="Publication">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Annotation" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PublisherId" Type="Int32" Nullable="false" />
+          <Property Name="BBK_Id" Type="Int32" />
+          <Property Name="YDK_Id" Type="Int32" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="Pages" Type="Int32" Nullable="false" />
+          <Property Name="ISBN" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Record" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Left" Type="Int32" Nullable="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="BBK" Relationship="Self.FK_Publications_BBK" FromRole="publications" ToRole="bbk" />
+          <NavigationProperty Name="LostPubs" Relationship="Self.FK_LostPublications_Publications" FromRole="publications" ToRole="lost_pubs" />
+          <NavigationProperty Name="Publisher" Relationship="Self.FK_Publications_Publisher" FromRole="publications" ToRole="publishers" />
+          <NavigationProperty Name="YDK" Relationship="Self.FK_Publications_YDK" FromRole="publications" ToRole="ydk" />
+          <NavigationProperty Name="RentedPubs" Relationship="Self.FK_RentedPublications_Publications" FromRole="publications" ToRole="rented_pubs" />
+          <NavigationProperty Name="Authors" Relationship="Self.publication_author" FromRole="publications" ToRole="authors" />
+        </EntityType>
+        <EntityType Name="Publisher">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Publications" Relationship="Self.FK_Publications_Publisher" FromRole="publishers" ToRole="publications" />
+        </EntityType>
+        <EntityType Name="RentedPubs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LibrarianId" Type="Int32" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="PublicationId" Type="Int32" Nullable="false" />
+          <Property Name="CountIssued" Type="Int32" Nullable="false" />
+          <Property Name="CountReturn" Type="Int32" Nullable="false" />
+          <Property Name="DateIssued" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateExpired" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Librarian" Relationship="Self.FK_RentedPublications_Librarian" FromRole="rented_pubs" ToRole="librarians" />
+          <NavigationProperty Name="Publication" Relationship="Self.FK_RentedPublications_Publications" FromRole="rented_pubs" ToRole="publications" />
+        </EntityType>
+        <EntityType Name="YDK">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Publications" Relationship="Self.FK_Publications_YDK" FromRole="ydk" ToRole="publications" />
+        </EntityType>
+        <Association Name="FK_Publications_BBK">
+          <End Role="bbk" Type="dbModel.BBK" Multiplicity="0..1" />
+          <End Role="publications" Type="dbModel.Publication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="bbk">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="publications">
+              <PropertyRef Name="BBK_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LostPublications_Librarian">
+          <End Role="librarians" Type="dbModel.Librarian" Multiplicity="0..1" />
+          <End Role="lost_pubs" Type="dbModel.LostPubs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="librarians">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="lost_pubs">
+              <PropertyRef Name="LibrarianId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentedPublications_Librarian">
+          <End Role="librarians" Type="dbModel.Librarian" Multiplicity="0..1" />
+          <End Role="rented_pubs" Type="dbModel.RentedPubs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="librarians">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="rented_pubs">
+              <PropertyRef Name="LibrarianId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LostPublications_Publications">
+          <End Role="publications" Type="dbModel.Publication" Multiplicity="1" />
+          <End Role="lost_pubs" Type="dbModel.LostPubs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="publications">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="lost_pubs">
+              <PropertyRef Name="PublicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Publications_Publisher">
+          <End Role="publishers" Type="dbModel.Publisher" Multiplicity="1" />
+          <End Role="publications" Type="dbModel.Publication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="publishers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="publications">
+              <PropertyRef Name="PublisherId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Publications_YDK">
+          <End Role="ydk" Type="dbModel.YDK" Multiplicity="0..1" />
+          <End Role="publications" Type="dbModel.Publication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ydk">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="publications">
+              <PropertyRef Name="YDK_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentedPublications_Publications">
+          <End Role="publications" Type="dbModel.Publication" Multiplicity="1" />
+          <End Role="rented_pubs" Type="dbModel.RentedPubs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="publications">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="rented_pubs">
+              <PropertyRef Name="PublicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="publication_author">
+          <End Role="authors" Type="dbModel.Author" Multiplicity="*" />
+          <End Role="publications" Type="dbModel.Publication" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Author" EntityType="dbModel.Author" />
+          <EntitySet Name="BBK" EntityType="dbModel.BBK" />
+          <EntitySet Name="Librarian" EntityType="dbModel.Librarian" />
+          <EntitySet Name="LostPubs" EntityType="dbModel.LostPubs" />
+          <EntitySet Name="Publication" EntityType="dbModel.Publication" />
+          <EntitySet Name="Publisher" EntityType="dbModel.Publisher" />
+          <EntitySet Name="RentedPubs" EntityType="dbModel.RentedPubs" />
+          <EntitySet Name="YDK" EntityType="dbModel.YDK" />
+          <AssociationSet Name="FK_Publications_BBK" Association="Self.FK_Publications_BBK">
+            <End Role="bbk" EntitySet="BBK" />
+            <End Role="publications" EntitySet="Publication" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LostPublications_Librarian" Association="Self.FK_LostPublications_Librarian">
+            <End Role="librarians" EntitySet="Librarian" />
+            <End Role="lost_pubs" EntitySet="LostPubs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentedPublications_Librarian" Association="Self.FK_RentedPublications_Librarian">
+            <End Role="librarians" EntitySet="Librarian" />
+            <End Role="rented_pubs" EntitySet="RentedPubs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LostPublications_Publications" Association="Self.FK_LostPublications_Publications">
+            <End Role="publications" EntitySet="Publication" />
+            <End Role="lost_pubs" EntitySet="LostPubs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publications_Publisher" Association="Self.FK_Publications_Publisher">
+            <End Role="publishers" EntitySet="Publisher" />
+            <End Role="publications" EntitySet="Publication" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publications_YDK" Association="Self.FK_Publications_YDK">
+            <End Role="ydk" EntitySet="YDK" />
+            <End Role="publications" EntitySet="Publication" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentedPublications_Publications" Association="Self.FK_RentedPublications_Publications">
+            <End Role="publications" EntitySet="Publication" />
+            <End Role="rented_pubs" EntitySet="RentedPubs" />
+          </AssociationSet>
+          <AssociationSet Name="publication_author" Association="Self.publication_author">
+            <End Role="authors" EntitySet="Author" />
+            <End Role="publications" EntitySet="Publication" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище dbModelContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Author">
+            <EntityTypeMapping TypeName="dbModel.Author">
+              <MappingFragment StoreEntitySet="authors">
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BBK">
+            <EntityTypeMapping TypeName="dbModel.BBK">
+              <MappingFragment StoreEntitySet="bbk">
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Code" ColumnName="code" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Librarian">
+            <EntityTypeMapping TypeName="dbModel.Librarian">
+              <MappingFragment StoreEntitySet="librarians">
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Login" ColumnName="login" />
+                <ScalarProperty Name="Password" ColumnName="password" />
+                <ScalarProperty Name="Surname" ColumnName="surname" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Patronymic" ColumnName="patronymic" />
+                <ScalarProperty Name="Salary" ColumnName="salary" />
+                <ScalarProperty Name="ImagePath" ColumnName="image_path" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LostPubs">
+            <EntityTypeMapping TypeName="dbModel.LostPubs">
+              <MappingFragment StoreEntitySet="lost_pubs">
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="LibrarianId" ColumnName="librarian_id" />
+                <ScalarProperty Name="ClientId" ColumnName="client_id" />
+                <ScalarProperty Name="PublicationId" ColumnName="pub_id" />
+                <ScalarProperty Name="Count" ColumnName="count" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Publication">
+            <EntityTypeMapping TypeName="dbModel.Publication">
+              <MappingFragment StoreEntitySet="publications">
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Title" ColumnName="title" />
+                <ScalarProperty Name="Annotation" ColumnName="annotation" />
+                <ScalarProperty Name="PublisherId" ColumnName="publisher_id" />
+                <ScalarProperty Name="BBK_Id" ColumnName="bbk_id" />
+                <ScalarProperty Name="YDK_Id" ColumnName="ydk_id" />
+                <ScalarProperty Name="Year" ColumnName="year" />
+                <ScalarProperty Name="Pages" ColumnName="pages" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="Record" ColumnName="record" />
+                <ScalarProperty Name="Left" ColumnName="left" />
+                <ScalarProperty Name="ImagePath" ColumnName="image_path" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Publisher">
+            <EntityTypeMapping TypeName="dbModel.Publisher">
+              <MappingFragment StoreEntitySet="publishers">
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RentedPubs">
+            <EntityTypeMapping TypeName="dbModel.RentedPubs">
+              <MappingFragment StoreEntitySet="rented_pubs">
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="LibrarianId" ColumnName="librarian_id" />
+                <ScalarProperty Name="ClientId" ColumnName="client_id" />
+                <ScalarProperty Name="PublicationId" ColumnName="pub_id" />
+                <ScalarProperty Name="CountIssued" ColumnName="count_issued" />
+                <ScalarProperty Name="CountReturn" ColumnName="count_return" />
+                <ScalarProperty Name="DateIssued" ColumnName="date_issued" />
+                <ScalarProperty Name="DateExpired" ColumnName="date_expired" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="YDK">
+            <EntityTypeMapping TypeName="dbModel.YDK">
+              <MappingFragment StoreEntitySet="ydk">
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Code" ColumnName="code" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="publication_author" TypeName="dbModel.publication_author" StoreEntitySet="publication_author">
+            <EndProperty Name="authors">
+              <ScalarProperty Name="Id" ColumnName="author_id" />
+            </EndProperty>
+            <EndProperty Name="publications">
+              <ScalarProperty Name="Id" ColumnName="pub_id" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

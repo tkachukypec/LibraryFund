@@ -1,0 +1,164 @@
+﻿<Page x:Class="LibraryIS.Pages.MainWindowsPages.Page1"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:LibraryIS.Pages.MainWindowsPages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Name="window"
+      Title="{Binding Title}">
+
+    <Grid>
+        <StackPanel Orientation="Vertical" Width="200" Margin="10,150,0,0" HorizontalAlignment="Left">
+            <Expander IsExpanded="True" Header="ББК">
+                <ListBox ItemsSource="{Binding BBKFilters,Mode=OneWay}" SelectionMode="Extended" BorderThickness="0" Background="Transparent">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Checked="Filter_Checked" Unchecked="Filter_UnChecked" Content="{Binding BBK.Name}"
+                                      IsChecked="{Binding IsChecked}"></CheckBox>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Expander>
+            <Button Margin="20,5,20,0" Style="{StaticResource resetFiltersButtonStyle}"
+                    Background="Transparent" BorderThickness="0" Foreground="#7d7d7d"
+                    Click="ResetFilterButton_Click" Visibility="{Binding ResetFilterActive,Converter={StaticResource booleanToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontSize="13" Margin="0,0,15,0"></TextBlock>
+                    <TextBlock FontSize="15" TextDecorations="Underline">Сбросить фильтры</TextBlock>
+                </StackPanel>
+            </Button>
+
+            <ComboBox SelectionChanged="SortComboBox_SelectionChanged" SelectedIndex="{Binding SelectedSort}" Margin="0,20">
+                <ComboBoxItem>по номеру (по возрастанию)</ComboBoxItem>
+                <ComboBoxItem>по номеру (по убыванию)</ComboBoxItem>
+                <ComboBoxItem>по названию (А-Я)</ComboBoxItem>
+                <ComboBoxItem>по названию (Я-А)</ComboBoxItem>
+                <ComboBoxItem>по дате (по возрастанию)</ComboBoxItem>
+                <ComboBoxItem>по дате (по убыванию)</ComboBoxItem>
+            </ComboBox>
+            <Button Margin="0,5" Command="{Binding AddCommand}">
+                <Button.Content>
+                    Добавить запись
+                </Button.Content>
+            </Button>
+            <Button Margin="0,5" Command="{Binding EditCommand}" CommandParameter="{Binding Path=SelectedItem,ElementName=dataGridCatalogBooks}">
+                <Button.Content>
+                    Редактировать запись
+                </Button.Content>
+            </Button>
+            <Button Margin="0,5" Command="{Binding RemoveCommand}" CommandParameter="{Binding Path=SelectedItem,ElementName=dataGridCatalogBooks}">
+                <Button.Content>
+                    Удалить запись
+                </Button.Content>
+            </Button>
+            
+        </StackPanel>
+        <TextBox Style="{StaticResource searchTextBoxStyle}" BorderBrush="#10101A" VerticalContentAlignment="Center"
+                 FontSize="16" TextChanged="SearchTextBox_TextChanged"
+                 Text="{Binding SearchString,UpdateSourceTrigger=PropertyChanged}"
+                 Margin="220,30,30,0" VerticalAlignment="Top" Height="35"></TextBox>
+        <TextBlock Foreground="#7d7d7d" Margin="220,75,30,0" VerticalAlignment="Top">
+            <TextBlock.Text>
+                <MultiBinding StringFormat="Результат поиска: {0} к. из {1}">
+                    <Binding Path="CurrentCountElements"></Binding>
+                    <Binding Path="CountAllElements"></Binding>
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+
+        <TextBlock Text="{Binding Title}" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Roboto" FontSize="25" Margin="30"></TextBlock>
+        <TabControl ItemContainerStyle="{StaticResource tabItemStyle}" BorderThickness="0" Margin="220,100,35,35">
+            <TabItem x:Name="_ti">
+                <TabItem.Header>
+                    <Image Margin="5" Width="20" Height="20">
+                        <Image.Source>
+                            <DrawingImage>
+                                <DrawingImage.Drawing>
+                                    <DrawingGroup>
+                                        <GeometryDrawing Brush="{Binding ElementName=_ti,Path=Foreground}" Geometry="{StaticResource vec1}"></GeometryDrawing>
+                                    </DrawingGroup>
+                                </DrawingImage.Drawing>
+                            </DrawingImage>
+                        </Image.Source>
+                    </Image>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource catalogBookItemStyle}" Margin="0" BorderThickness="0" Background="Transparent" ItemsSource="{Binding Publications}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel></WrapPanel>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel Width="250" Height="450">
+                                    <Image Margin="0,20,0,0" DockPanel.Dock="Top" Width="150" Height="250" Source="{Binding ImagePath,Converter={StaticResource relativeToFullPathConverter}}"></Image>
+                                    <Button DockPanel.Dock="Bottom" Margin="0,0,0,20" Foreground="White" Background="#1c1a2f" Width="200" Height="40">Перейти</Button>
+                                    <TextBlock DockPanel.Dock="Top" Margin="20,0,0,0" Text="{Binding Book.Title}" TextAlignment="Left" FontSize="16" TextWrapping="Wrap"></TextBlock>
+                                    <TextBlock DockPanel.Dock="Top" Foreground="#7d7d7d" Margin="20,5,0,0" Text="{Binding Book.Author,Converter={StaticResource listAuthorToStringConverter}}" TextAlignment="Left" FontSize="16" TextWrapping="Wrap"></TextBlock>
+
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem x:Name="_ti2">
+                <TabItem.Header>
+                    <Image Margin="5" Width="20" Height="20">
+                        <Image.Source>
+                            <DrawingImage>
+                                <DrawingImage.Drawing>
+                                    <DrawingGroup>
+                                        <GeometryDrawing Brush="{Binding ElementName=_ti,Path=Foreground}" Geometry="{StaticResource vec2}"></GeometryDrawing>
+                                    </DrawingGroup>
+                                </DrawingImage.Drawing>
+                            </DrawingImage>
+                        </Image.Source>
+                    </Image>
+                </TabItem.Header>
+                <DataGrid Name="dataGridCatalogBooks" SelectionMode="Single" GridLinesVisibility="Horizontal"
+                          RowHeaderWidth="0" Background="Transparent"
+                          IsReadOnly="True" CanUserSortColumns="False" BorderThickness="0"
+                          ItemsSource="{Binding Publications}" AutoGenerateColumns="False">
+
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="100" Header="Изображение">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Height="100" Source="{Binding ImagePath,Converter={StaticResource relativeToFullPathConverter}}"></Image>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Width="150" Header="Название книги">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Book.Title}" TextAlignment="Center" TextWrapping="Wrap"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Width="150" Header="Авторы">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Book.Author,Converter={StaticResource listAuthorToStringConverter}}" TextAlignment="Center" TextWrapping="Wrap"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Header="Издательство" Binding="{Binding Publisher.Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Год издания" Binding="{Binding Year}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Кол-во страниц" Binding="{Binding Pages}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="ББК" Binding="{Binding BBK.Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="УДК" Binding="{Binding YDK.Name}"></DataGridTextColumn>
+                    </DataGrid.Columns>
+
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Page>
